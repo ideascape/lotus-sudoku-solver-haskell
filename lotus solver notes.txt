@@ -29,4 +29,4 @@ A possible good first step would be to write a function that proves the correctn
 
 This is going to work!! Next steps will be to investigate the syntax of sets and set operations in Haskell.
 
-I've also been contemplating writing a JS frontend that would display the solution on a lotus gameboard. That would be fun if I could do it without too much effort. 
+I've also been contemplating writing a JS frontend that would display the solution on a lotus gameboard. That would be fun if I could do it without too much effort.
