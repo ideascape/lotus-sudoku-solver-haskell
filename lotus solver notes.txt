@@ -105,9 +105,9 @@ returns first item in randoms, trims it from randoms list in gamestate
 
 ***
 
-example solTree:
+example refTree:
 [[],[],[],[],[],[],[[0..6],[6,13,14,21,29,36,44],[6,12,19,25,32,38,45]]]
-solTree !! 6 gives one list each from Ring, LeftArc, and RightArc. Put in a number, get the related lists. Will need to generate this, or just set it up manually.
+refTree !! 6 gives one list each from Ring, LeftArc, and RightArc. Put in a number, get the related lists. Will need to generate this, or just set it up manually.
 
 reflists: zip the refboards from validateLotus into tuples (1,0), (2,0), etc, the second item is a dummy number which will never be used. Needs to be preset so that it is the same type as solboard. Alternate ring, LArc, RArc, until all 21 have been added.
 
