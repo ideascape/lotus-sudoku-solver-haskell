@@ -30,3 +30,88 @@ A possible good first step would be to write a function that proves the correctn
 This is going to work!! Next steps will be to investigate the syntax of sets and set operations in Haskell.
 
 I've also been contemplating writing a JS frontend that would display the solution on a lotus gameboard. That would be fun if I could do it without too much effort.
+
+***
+
+4/26/16
+
+Spent several hours this afternoon thinking through the problem.
+
+main:
+a do statement. This will be the only IO section of the code. Solicits input from user "How many solutions do you want?"
+Gets an infinite list of random numbers from 1-7.
+Generates the ref tree and reflists.
+Calls generateSolution as many times as the user requests, validates the solution and prints the solution to the console after each iteration
+
+generateSolution::[[(Int, Int)]] -> [[[Int]]] -> [(Int, Int)] -> [Int] -> [Int]
+generateSolution reflists reftree solboard randoms =
+
+Attempts to add a number to the solboard for the reflist. Processes all 21 reflists, then calls itself again as many times as necessary until either the process fails or a solution is found. Returns a list of values ordered by index.
+
+processReflists::[(Int, Int)] [[[Int]]] -> [(Int, Int)] -> [Int, [Int], [(Int, Int)]]
+processReflists reflists reftree solboard randoms =
+
+addVal::
+addVal reflist reftree solboard randoms lastResult
+  | (lastResult = 0) =
+  |
+
+returns a list with a return status and the modified randoms list and the solboard. Possible statuses are : failed, add successful, or list already full. We will use 0, 1 and 2 to represent these. Function will repeat until the the final sum of all the return values is equal to 42, or a failed status is returned.
+
+Maybe I need a game datatype of some kind. Gamestate needs to be passed to every function we use, and dealing with five parameters for every function gets a bit old.
+Gamestate data:
+reflist, reftree (original unmodified)
+randoms (current value, used values discarded)
+solboard
+status: in progress, solution found, or failed. methods check this to see whether to continue. May just use boolean in progress or failed
+
+Only randoms and solboard will be modified within the gamestate. reflist will be used as a reference to pull out when functions need to be restarted (either that, or we can just use global variables).
+
+Let's try this again.
+
+generateSolution::
+generateSolution reflists gamestate
+  | gamestate status == inprogress = processReflists reflists gamestate
+  | gamestate status == failed = generateSolution reflists (reset gamestate) -- or print "solution not found"
+
+processReflists::
+processReflists reflists gamestate
+  | gamestate status == inprogress = addVal re
+  | gamestate status == failed = gamestate
+
+addVal::reflist -> gamestate -> (result, gamestate)
+addVal reflist gamestate
+  | gamestate status == failed = (failed, gamestate)
+  | gamestate status == inprogress = (if length listdiff > 0 then (addSol (listdiff !! 0) []) else (full, gamestate))
+  where listdiff = (reflist - (intersectSolboard reflist solboard))
+
+intersectSolboard
+intersectBy (\(i,val) (index,value) -> i == index) solboard reflist
+
+addSol listel solutionsTried
+if (checkReftree candVal) then append candVal to solboard else failed
+where candVal = ((fst listel), randVal))
+--need to keep track of unique values tried. When we reach seven, we return failed
+--probably just have addSol call itself until failure or success happens. Return (status, gamestate).
+
+checkReftree
+calls itself until each reflist has been checked, like so:
+  | (elem (snd candVal) (intersectSolboard solboard reflist) = False --If the value is already in one of the lists, return false
+  | otherwise = True
+where reflists = (reftree !! (fst candVal))
+
+randVal
+returns first item in randoms, trims it from randoms list in gamestate
+
+***
+
+example solTree:
+[[],[],[],[],[],[],[[0..6],[6,13,14,21,29,36,44],[6,12,19,25,32,38,45]]]
+solTree !! 6 gives one list each from Ring, LeftArc, and RightArc. Put in a number, get the related lists. Will need to generate this, or just set it up manually.
+
+reflists: zip the refboards from validateLotus into tuples (1,0), (2,0), etc, the second item is a dummy number which will never be used. Needs to be preset so that it is the same type as solboard. Alternate ring, LArc, RArc, until all 21 have been added.
+
+solboard: [(index, val), (0,3), (1,5), (etc)]
+first number is index relating to position on board, second is number from one to seven
+
+randoms: infinite list of random numbers from 1 to 7
