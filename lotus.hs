@@ -29,12 +29,12 @@ main = do
   let randoms = (randomRs ('1','7') gen)
   let solboard = []
   let solboard = filter (\(a,b) -> b/=0) (zipWith (\a b -> (a, b::Int)) [0..48] [5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,0])
-  let testsol = filter (\(a,b) -> b/=0) (zipWith (\a b -> (a, b::Int)) [0..48]  [5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,6])
-  --putStrLn $ show $ generateSolutionGroup (cleanSol testsol) ((cleanReflists reflists) !! 1)
-  putStrLn $ show $ validate $ testsol
-  --putStrLn $ show $ reftree !! 14
+  let testsol = filter (\(a,b) -> b/=0) (zipWith (\a b -> (a, b::Int)) [0..48]  [5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,0])
+  --putStrLn $ show $ generateSolutionGroup (cleanSol testsol) ((cleanReflists reflists) !! 20)
+  --putStrLn $ show $ validate $ testsol
+  --putStrLn $ show $ reftree !! 48
   --putStrLn $ show $ length $ runThrough solboard reflists
-  --putStrLn $ show $ runThrough solboard reflists
+  putStrLn $ debugInfo $ runThrough testsol reflists
   --putStrLn $ show $ intersectTpls (ring !! 0) [(1,0),(5,0),(66,0)]
   --let gamestate = [reflists, reftree, solboard, randoms]
   --generateSolution reflists gamestate
@@ -140,6 +140,13 @@ cleanReflists reflists = map (\xs -> cleanReflists xs) reflists
 
 cleanSol::[(Int,Int)] -> [Int]
 cleanSol xs = map (\(a,b) -> b) xs
+
+debugInfo::[(Int,Int)]->String
+debugInfo sol = "Length: " ++ show (length sol) ++ "\n" ++ show sol ++ "\n" ++ "Validate: " ++ show (validate sol) ++ "\n" ++ "Solgroups: " ++ "\n" ++ (debugSolgroups (cleanSol sol) (cleanReflists reflists))
+
+debugSolgroups::[Int] -> [[Int]] -> String
+debugSolgroups solution [] = ""
+debugSolgroups solution (reflist:xs) = show (generateSolutionGroup solution reflist) ++ show (validateSolutionGroup (generateSolutionGroup solution reflist)) ++ "\n" ++ (debugSolgroups solution xs)
 
 --set difference operator is \\
 
