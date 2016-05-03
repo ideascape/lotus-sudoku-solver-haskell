@@ -9,10 +9,9 @@
 --[0,1,0,7,6,0,0,4,0,0,1,0,0,0,0,0,6,0,0,5,0,0,0,0,0,0,0,5,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,4,0,0,0,0,0]
 --[4,0,5,3,0,1,7,1,7,0,0,0,0,0,0,0,6,0,0,5,2,1,2,3,0,0,0,5,6,0,7,4,0,1,3,0,0,0,0,0,0,0,1,4,0,6,0,7,0]
 
---Simple test cases:
+--Simple test case:
 --[5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,0]
 
-import System.Random
 import Data.List
 import Data.Char
 import Data.Maybe
@@ -22,25 +21,36 @@ clockwiseArc =  [[0,7,15,22,30,37,45],[1,8,16,23,31,38,46],[2,9,17,24,32,39,47],
 counterclockwiseArc =  [[0,13,20,26,33,39,46],[1,7,14,27,34,40,47],[2,8,15,21,28,41,48],[3,9,16,22,29,35,42],[4,10,17,23,30,36,43],[5,11,18,24,31,37,44],[6,12,19,25,32,38,45]]
 
 reflists = generateReflists ring clockwiseArc counterclockwiseArc
-
 reftree = generateReftree ring clockwiseArc counterclockwiseArc [0..48]
 
 main = do
-  let testSol =   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0]
-  let testSol2 = [5,0,0,0,1,6,0,0,0,0,3,0,0,0,7,0,6,2,1,0,0,0,1,7,0,0,6,0,0,5,0,3,6,7,2,0,0,2,1,0,0,4,0,0,4,0,0,1,0]
-  putStrLn $ show $ generateSolution testSol
-  --putStrLn $ show $ validatePlacement testSol 6 48
-  return ()
+  let testSol = [5,0,0,0,1,6,0,0,0,0,3,0,0,0,7,0,6,2,1,0,0,0,1,7,0,0,6,0,0,5,0,3,6,7,2,0,0,2,1,0,0,4,0,0,4,0,0,1,0]
+  let testSolA =   [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0]
+  let testSolB = [4,1,2,3,6,0,0,0,0,0,0,1,0,0,0,1,7,4,0,0,2,0,0,0,0,1,0,5,3,0,0,4,0,0,0,0,7,0,0,0,0,0,0,1,2,0,0,0,0]
+  let testSolC = [0,1,0,7,6,0,0,4,0,0,1,0,0,0,0,0,6,0,0,5,0,0,0,0,0,0,0,5,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,4,0,0,0,0,0]
+  let testSolD = [4,0,5,3,0,1,7,1,7,0,0,0,0,0,0,0,6,0,0,5,2,1,2,3,0,0,0,5,6,0,7,4,0,1,3,0,0,0,0,0,0,0,1,4,0,6,0,7,0]
+  let testSolE = [0,1,2,0,6,0,0,0,0,7,1,0,0,0,0,0,6,0,0,0,0,1,0,0,0,0,0,0,6,0,0,0,0,2,0,2,3,0,0,6,0,0,1,4,0,0,0,0,0]
+  let testSolF = [0,0,0,7,6,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]
+  let testSolInvalid = [0,0,3,7,6,1,4,4,0,5,1,7,0,0,0,2,6,0,4,5,3,1,0,0,2,0,0,5,6,0,7,0,0,2,3,2,3,0,7,6,0,0,0,4,5,6,1,7,0]
 
---may need to wrap in 'list stripping' function if there ends up being multiple solutions
---note: otherwise = getSol 1 ++ getSol 2 ++ getSol 3 ++ getSol 4 ++ getSol 5 ++ getSol 6 ++ getSol 7 outputs *immediately* when a solution is found, but we only want one. Not sure how to retain immediacy
+  putStrLn $ show $ (generateSolution testSolA)
+  --putStrLn $ show $ validatePlacement testSol 6 48
+
+
 generateSolution::[Int] -> [Int]
 generateSolution solboard
   | length solboard == 0 = []
   | (checkForZeros solboard) = validateSol solboard
-  | otherwise = returnOne [getSol 1,getSol 2,getSol 3,getSol 4,getSol 5,getSol 6,getSol 7]
+  | otherwise = (getSol 1 `takeOne` getSol 2 `takeOne` getSol 3 `takeOne` getSol 4 `takeOne` getSol 5 `takeOne` getSol 6 `takeOne` getSol 7)
     where getSol val = generateSolution(getPlacement solboard val)
           checkForZeros solboard = length (filter (==0) solboard) == 0
+          takeOne left right = if length left > 0 then left else right
+
+
+takeWhileInclusive :: (a -> Bool) -> [a] -> [a]
+takeWhileInclusive _ [] = []
+takeWhileInclusive p (x:xs) = x : if p x then takeWhileInclusive p xs
+                                         else []
 
 returnOne::[[Int]]->[Int]
 returnOne sols
