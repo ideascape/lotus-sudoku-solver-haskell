@@ -15,6 +15,7 @@
 import System.Random
 import Data.List
 import Data.Char
+import Data.Maybe
 
 ring =  zipRefs $ [[0..6],[7..13],[14..20],[21..27],[28..34],[35..41],[42..48]]
 clockwiseArc = zipRefs $  [[0,7,15,22,30,37,45],[1,8,16,23,31,38,46],[2,9,17,24,32,39,47],[3,10,18,25,33,40,48],[4,11,19,26,34,41,42],[5,12,20,27,28,35,43],[6,13,14,21,29,36,44]]
@@ -30,15 +31,23 @@ main = do
   let solboard = []
   let solboard = filter (\(a,b) -> b/=0) (zipWith (\a b -> (a, b::Int)) [0..48] [5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,0])
   let testsol = filter (\(a,b) -> b/=0) (zipWith (\a b -> (a, b::Int)) [0..48]  [5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,0])
+  putStrLn $ show $ getPlacement [3,4,0,2,1,6,3,6,5,4,3,7,9,1,7,3,6,2,1,5,4,2,1,7,0,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,7] 999
   --putStrLn $ show $ generateSolutionGroup (cleanSol testsol) ((cleanReflists reflists) !! 20)
   --putStrLn $ show $ validate $ testsol
   --putStrLn $ show $ reftree !! 48
   --putStrLn $ show $ length $ runThrough solboard reflists
-  putStrLn $ debugInfo $ runThrough testsol reflists
+  --putStrLn $ debugInfo $ runThrough testsol reflists
   --putStrLn $ show $ intersectTpls (ring !! 0) [(1,0),(5,0),(66,0)]
   --let gamestate = [reflists, reftree, solboard, randoms]
   --generateSolution reflists gamestate
   return ()
+
+getPlacement::[Int]->Int->[Int]
+getPlacement solboard val
+  | (findIndex (==0) solboard == Nothing) = solboard
+  | otherwise =
+    let (x,_:ys) = splitAt (fromJust ((findIndex (==0) solboard))) solboard
+    in  x ++ val:ys
 
 generateReftree::[[(Int,Int)]] -> [[(Int,Int)]] -> [[(Int,Int)]] -> [Int] -> [[[(Int,Int)]]]
 generateReftree _ _ _ [] = []
@@ -67,6 +76,7 @@ intersectTpls left right = intersectBy (\(i,val) (index,value) -> i == index) le
 --  where updateReflists reflists modReflist round = ((reflists \\ (reflists !! round)) ++ modReflist)
 --        addValResult = addVal solboard (reflists !! round)
 
+--Takes
 runThrough::[(Int,Int)] -> [[(Int,Int)]] -> [(Int,Int)]
 --runThrough (elem (-1,-1) solboard) --Need to check for failed solution
 runThrough solboard reflists
@@ -92,7 +102,6 @@ addVal solboard reflist
     where added = (addAtIndex (fst $ head reflist) solboard)
 
 --returns (index,-1) on failure, otherwise returns the validated item to place in solboard
---if index already has move on board, return empty tuple?
 addAtIndex::Int -> [(Int,Int)] -> (Int,Int)
 addAtIndex index solboard
   | (length intersect > 0) = (0,0)
@@ -129,6 +138,7 @@ validateLotus solution (reflist:xs) = validateSolutionGroup (generateSolutionGro
 
 --Other input validations: are the numbers between 1 and 7; are there 7 and only 7 of each number
 
+--Entry point to validation
 validate::[(Int,Int)] -> [Int]
 validate solution
   | (length solution /= 49) = [-1]
