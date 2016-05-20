@@ -1,3 +1,5 @@
+Note to interested readers: these notes refer to stuff that doesn't exist anymore.
+
 First thing to do is create the lists of index numbers.
 LeftArc: 7 sets of seven numbers
 RightArc: 7 sets of seven numbers
