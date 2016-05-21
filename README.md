@@ -13,8 +13,11 @@ This is an illustration of an empty board with the counter-clockwise arcs highli
 <img src="https://github.com/ideascape/lotus-sudoku-solver-haskell/blob/master/readme-pics/lss2.jpg" width="400"/>
 
 Clockwise arcs are the same, except in the opposite direction. The rules of the game: 
+
 1. Every arc contains the numbers 1 to 7
+
 2. Every ring contains the numbers 1 to 7
+
 3. No number can be repeated in any ring or arc.
 
 Like so:
