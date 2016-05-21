@@ -19,7 +19,7 @@ Clockwise arcs are the same, except in the opposite direction. The rules of the 
 
 Like so:
 
-<img src="https://github.com/ideascape/lotus-sudoku-solver-haskell/blob/master/readme-pics/lss8.jpg" width="400"/>
+<img src="https://github.com/ideascape/lotus-sudoku-solver-haskell/blob/master/readme-pics/lss8.gif" width="400"/>
 
 There are 49 spaces on the board. For purposes of program input, the spaces will be numbered like this:
 
