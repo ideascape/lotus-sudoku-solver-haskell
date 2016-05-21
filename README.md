@@ -39,8 +39,10 @@ This is a legal solution for the same board:
 
 The correct output for the program would be this: [5,4,7,2,1,6,3,6,5,4,3,7,2,1,7,3,6,2,1,5,4,2,1,7,5,4,6,3,1,5,4,3,6,7,2,7,6,2,1,3,5,4,3,5,4,7,2,1,6]
 
-The code in lotusSolverFinal.hs has been commented pretty thoroughly. 
+If there is no valid solution, the program will output an empty array.
+
+The code in lotusSolverFinal.hs has been commented pretty thoroughly, if you're curious how the program works. 
 
 To test the program, download Haskell at https://www.haskell.org/platform/ and clone this repo. Then just type 'runhaskell lotusSolverFinal.hs'. This will ask the program for to solve several several given puzzles (see testSolsValid in main) and print the found solutions for each.
 
-Credit to Dain Vermaak for the above images and the idea for the lotus soduku solver challenge.  
+Credit to Dain Vermaak for most of the above images and for the idea for the lotus soduku solver challenge.
