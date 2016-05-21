@@ -3,9 +3,11 @@ import Data.Maybe
 
 -- *** General Comments *** --
 
---I would describe the process of learning Haskell, and this project in particular, as among the most difficult programming tasks I have attempted. I am not ashamed to admit I went through four different approaches in the course of completing this project. There is no question that it has been time well spent - the level of comfort achieved with recursion, lambda functions, list comprehensions, and even some data structures will pay dividends in other programming paradigms.
+--I would describe the process of learning Haskell, and this project in particular, as among the most difficult programming tasks I have attempted. There is no question that it has been time well spent - the level of comfort achieved with recursion, lambda functions, list comprehensions, and even some data structures will pay dividends in other programming paradigms.
 
---I was happy with how this project turned out. The runtime for the program is satisfactory. Running it on a completely empty list, the first solution is found in under 3 seconds on my computer. It would be easy to tweak the program to output a (probably somewhat less than) infinite number of solutions.
+--I was happy with how this project turned out. The runtime for the program is satisfactory. Running it on a completely empty list (the hardest case), the first solution is found in under 3 seconds on my computer. It would be easy to tweak the program to output a (probably somewhat less than) infinite number of solutions. 
+
+--For the assignment grade, five unsolved puzzles with a minimum of three filled spaces were given as input. Bonus points were given for each individual puzzle that was solved in less than two minutes. For all five puzzles tested, the program found a solution in less than a second. The assignment received the maximum possible grade of 110/100.
 
 -- *** Data Structures *** --
 
@@ -30,13 +32,13 @@ main = do
   let testSolsValid = [[5,0,0,0,1,6,0,0,0,0,3,0,0,0,7,0,6,2,1,0,0,0,1,7,0,0,6,0,0,5,0,3,6,7,2,0,0,2,1,0,0,4,0,0,4,0,0,1,0],[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0],[4,1,2,3,6,0,0,0,0,0,0,1,0,0,0,1,7,4,0,0,2,0,0,0,0,1,0,5,3,0,0,4,0,0,0,0,7,0,0,0,0,0,0,1,2,0,0,0,0],[0,1,0,7,6,0,0,4,0,0,1,0,0,0,0,0,6,0,0,5,0,0,0,0,0,0,0,5,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0,4,0,0,0,0,0],[4,0,5,3,0,1,7,1,7,0,0,0,0,0,0,0,6,0,0,5,2,1,2,3,0,0,0,5,6,0,7,4,0,1,3,0,0,0,0,0,0,0,1,4,0,6,0,7,0],[0,1,2,0,6,0,0,0,0,7,1,0,0,0,0,0,6,0,0,0,0,1,0,0,0,0,0,0,6,0,0,0,0,2,0,2,3,0,0,6,0,0,1,4,0,0,0,0,0],[0,0,0,7,6,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0]]
   let testSolInvalid = [0,0,3,7,6,1,4,4,0,5,1,7,0,0,0,2,6,0,4,5,3,1,0,0,2,0,0,5,6,0,7,0,0,2,3,2,3,0,7,6,0,0,0,4,5,6,1,7,0]
 
-  --putStrLn $ show $ lotusSolver $ replicate 49 0
-  putStrLn $ show $ map (\xs -> show (lotusSolver xs)) testSolsValid
-
+  --putStrLn $ show $ lotusSolver $ replicate 49 0 -- For testing an empty board
+  --putStrLn $ show $ lotusSolver testSolInvalid -- For testing a puzzle that is known not to have a solution.
+  mapM_ (\xs -> (putStrLn $ show $ lotusSolver xs)) testSolsValid -- For testing an array of puzzles. These all happen to have valid solutions.
 {-
   First we check whether the solboard has anything in it; some of the supporting functions return an empty list. Then we check to see whether the solboard has any unfilled positions (does it have any zeros?). If it doesn't, we have a candidate solution and call validateSol.
 
-  The main algorithm is recursive, unsuprisingly; a thread is started for each of the seven possible values. After each call of getSol there is one more value added to the board. Although every starting position is considered, it is not exhaustive; each candidate position is checked against the existing values on the board. If there is a conflict (i.e. that value has already been placed in one of the rings or arcs that index belongs to), that branch of the tree is not pursued any further (an empty list is returned for that branch and is subsumed by the other results).
+  The main algorithm is recursive, unsurprisingly; a thread is started for each of the seven possible values. After each call of getSol there is one more value added to the board. Although every starting position is considered, it is not exhaustive; each candidate position is checked against the existing values on the board. If there is a conflict (i.e. that value has already been placed in one of the rings or arcs that index belongs to), that branch of the tree is not pursued any further (an empty list is returned for that branch and is subsumed by the other results).
 
   The takeOne helper function winnows down the results for solboards that have more than one solution. Thanks to the laziness of Haskell, once a result is found, the other threads cease evaluation.
 
